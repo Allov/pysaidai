@@ -63,7 +63,7 @@ save_cooldown = 0
 load_cooldown = 0
 
 # track current element
-current_element = 4
+current_element = 1
 possible_elements = [SAND, WATER, GAS, LAVA, ROCK, ICE, WOOD, MUD, GRASS, IRON, EMPTY]
 # name element for display
 element_names = ["SAND", "WATER", "GAS", "LAVA", "ROCK", "ICE", "WOOD", "MUD", "GRASS", "IRON", "EMPTY"]
@@ -347,15 +347,21 @@ while running:
         for x in range(len(grid[y])):
             # sand logic, it should fall through empty space or water
             if grid[y][x] == SAND:
+                # define a random direction to fall to the left or right
+                random_direction = random.choice([-1, 1])
+
+
                 if y + 1 < len(grid) and grid[y + 1][x] == EMPTY:
                     next_grid[y + 1][x] = SAND
                     next_grid[y][x] = EMPTY
-                elif y + 1 < len(grid) and x - 1 >= 0 and grid[y + 1][x - 1] == EMPTY:
-                    next_grid[y + 1][x - 1] = SAND
+                # elif y + 1 < len(grid) and x - 1 >= 0 and grid[y + 1][x - random_direction] == EMPTY:
+                #     next_grid[y + 1][x - random_direction] = SAND
+                #     next_grid[y][x] = EMPTY
+                elif y + 1 < len(grid) and x + 1 < len(grid[y]) and grid[y + 1][x + random_direction] == EMPTY:
+                    next_grid[y + 1][x + random_direction] = SAND
                     next_grid[y][x] = EMPTY
-                elif y + 1 < len(grid) and x + 1 < len(grid[y]) and grid[y + 1][x + 1] == EMPTY:
-                    next_grid[y + 1][x + 1] = SAND
-                    next_grid[y][x] = EMPTY
+
+                
                 # include water
                 elif y + 1 < len(grid) and grid[y + 1][x] == WATER:
                     next_grid[y + 1][x] = SAND
@@ -378,6 +384,7 @@ while running:
                     next_grid[y][x] = GAS
             elif grid[y][x] == WATER:
                 random_direction = random.choice([-1, -1, 1, 1, 1, -1, 1])
+                random_direction *= random.choice([1, 2, 3, 4, 5, 6, 7, 8])
 
                 # if there is space below, move down
                 if y + 1 < len(grid) and grid[y + 1][x] == EMPTY:
